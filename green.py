@@ -5,7 +5,7 @@ import time
 import datetime
 import csv
 
-print("indeedのurlを入力してください")
+print("Greenのurlを入力してください")
 
 target = input(">")
 
@@ -23,13 +23,13 @@ datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
 path = dir + datetime + '.csv'
 
-base_url = "https://jp.indeed.com/"
+base_url = "https://www.green-japan.com"
 company = []
 
 try:
     while True:
         soup = BeautifulSoup(response.text, 'html.parser')
-        new_company = soup.find_all('span', class_='companyName')
+        new_company = soup.find_all('h3', class_='card-info__detail-area__box__title')
 
         company += new_company
         company = list(set(company))
@@ -37,7 +37,7 @@ try:
 
         print(count)
 
-        next = soup.find('a', attrs={'aria-label':'次へ'})
+        next = soup.find('a', class_='next_page')
         print(next.get("href"))
 
         if count >= num:
@@ -46,6 +46,8 @@ try:
         # 次のページのurlの取得
         dynamic_url = urljoin(base_url, next.get("href"))
         response = requests.get(dynamic_url)
+
+    print('次のurl:' + dynamic_url)
 
     # CSVファイルの出力
     with open(path, 'w') as f:
