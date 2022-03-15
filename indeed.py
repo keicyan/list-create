@@ -47,6 +47,16 @@ try:
         dynamic_url = urljoin(base_url, next.get("href"))
         response = requests.get(dynamic_url)
 
+    # 会社名の出力
+    for item in company:
+        print(item.get_text())
+
+    # CSVファイルの出力
+    with open(path, 'w') as f:
+        f.write('name' + ',' + '\n')
+        for item in company:
+            f.write(item.get_text() + ',' + '\n')
+
 except:
     print('AccessError')
 
@@ -58,13 +68,3 @@ except:
     with open(path, 'w') as f:
         for item in company:
             f.write(item.get_text() + ',' + '\n')
-
-# 会社名の出力
-for item in company:
-    print(item.get_text())
-
-# CSVファイルの出力
-with open(path, 'w') as f:
-    f.write('name' + ',' + '\n')
-    for item in company:
-        f.write(item + ',' + '\n')
