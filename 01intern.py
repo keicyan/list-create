@@ -23,7 +23,8 @@ num = int(input(">"))
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
-path = dir + datetime + '.csv'
+file_name = "01intern-"
+path = dir + file_name + datetime + '.csv'
 
 base_url = "https://01intern.com/"
 company = []

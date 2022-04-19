@@ -11,6 +11,9 @@ print("wontedly のurlを入力してください")
 
 target = input(">")
 
+if target == "test":
+    target = "https://www.wantedly.com/projects?type=mixed&page=1&keywords%5B%5D=Vue.js"
+
 print('')
 
 print("取得数の入力（数字）")
@@ -23,7 +26,8 @@ response = requests.get(target)
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
-path = dir + datetime + '.csv'
+file_name = "wontedly-"
+path = dir + file_name + datetime + '.csv'
 # path = './data/sample.csv'
 
 base_url = "https://www.wantedly.com/"

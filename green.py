@@ -4,10 +4,14 @@ from urllib.parse import urljoin
 import time
 import datetime
 import csv
+import random
 
 print("Greenのurlを入力してください")
 
 target = input(">")
+
+if target == "test":
+    target = "https://www.green-japan.com/search_key/01?key=5nkvuljolntvgrqdbqne&keyword=Laravel"
 
 response = requests.get(target)
 
@@ -21,7 +25,8 @@ num = int(input(">"))
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
-path = dir + datetime + '.csv'
+file_name = "green-"
+path = dir + file_name + datetime + '.csv'
 
 base_url = "https://www.green-japan.com"
 company = []
@@ -29,6 +34,7 @@ company = []
 try:
     while True:
         soup = BeautifulSoup(response.text, 'html.parser')
+        time.sleep(random.randint(1, 5))
         new_company = soup.find_all('h3', class_='card-info__detail-area__box__title')
 
         company += new_company
@@ -54,7 +60,7 @@ try:
         f.write('name' + ',' + '\n')
         for item in company:
             f.write(item.get_text() + ',' + '\n')
-            f.write(dynamic_url)
+        f.write(dynamic_url)
 
 except:
     print('AccessError')
