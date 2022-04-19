@@ -45,8 +45,6 @@ try:
 
         print(count)
 
-        next = soup.find('a', attrs={'aria-label':'次へ'})
-
         next = soup.select('#jobAll > div > div.boxRight.clrFix > ul.btnTypeSelect02.parts.clrFix > li.btn_r.last > a')
         next_url = next[0].attrs['href']
         print(next_url)
