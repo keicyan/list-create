@@ -7,29 +7,35 @@ import datetime
 import csv
 import random
 
+# 取得URLの設定
 print("indeedのurlを入力してください")
 
 target = input(">")
 
-if target == "test":
-    target = "https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2+Laravel&start=40"
-
-response = requests.get(target)
-
+# 取得件数の設定
 print('')
-
 print("取得数の入力（数字）")
 
 num = int(input(">"))
 
-# ファイル名の指定
+# 保存先の設定
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
 file_name = "indeed-"
 path = dir + file_name + datetime + '.csv'
 
+# テストモードの設定
+if target == "test":
+    target = "https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2+Laravel&start=40"
+    path = dir + file_name + 'test.csv'
+
+# Responseオブジェクトの生成
+response = requests.get(target)
+
+# baseURLの設定
 base_url = "https://jp.indeed.com/"
+
 company = []
 
 try:

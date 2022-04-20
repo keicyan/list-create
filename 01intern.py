@@ -22,9 +22,10 @@ num = int(input(">"))
 # ファイル名の指定
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
+date = dt_now.strftime('%Y-%m-%d/')
 dir = './data/'
 file_name = "01intern-"
-path = dir + file_name + datetime + '.csv'
+path = dir + date + file_name + datetime + '.csv'
 
 base_url = "https://01intern.com/"
 company = []
