@@ -38,7 +38,12 @@ try:
     while True:
         soup = BeautifulSoup(response.text, 'html.parser')
         time.sleep(random.randint(1, 10))
-        new_company = soup.select('#app > div.content > div > section.section-wrap > section.section-main > section.service-list > div.list-box > article > div.service-detail > div > div.service-detail-box > div.service-detail-inner > h3 > div > a')
+
+        # 元のやつ
+        # new_company = soup.select(
+        #     '#app > div.content > div > section.section-wrap > section.section-main > section.service-list > div.list-box > article > div.service-detail > div > div.service-detail-box > div.service-detail-inner > h3 > div > a')
+
+        new_company = soup.find_all('span', class_='caption')
 
         company += new_company
         company = list(set(company))
@@ -46,7 +51,8 @@ try:
 
         print(count)
 
-        next = soup.select('#app > div.content > div > section.section-wrap > section.section-main > section.service-list > nav > ul > li:nth-child(15) > a')
+        next = soup.select(
+            '#app > div.content > div > section.section-wrap > section.section-main > section.service-list > nav > ul > li:nth-child(15) > a')
         next_url = next[0].attrs['href']
 
         if count >= num:
@@ -57,9 +63,12 @@ try:
 
     # CSVファイルの出力
     with open(path, 'w') as f:
-        f.write('name' + ',' + '\n')
+        f.write('name' + ',' + 'url' + ',' + '\n')
         for item in company:
-            f.write(item.get_text() + ',' + '\n')
+            get_text = item.text
+            get_text = get_text.replace("出典：", "").strip()
+            get_text = get_text.replace(" http", ",http")
+            f.write(get_text + ',' + '\n')
         f.write(next_url)
 
 except:
@@ -69,5 +78,8 @@ except:
     with open(path, 'w') as f:
         f.write('name' + ',' + '\n')
         for item in company:
-            f.write(item.get_text() + ',' + '\n')
+            get_text = item.text
+            get_text = get_text.replace("出典：", "").strip()
+            get_text = get_text.replace(" http", ",http")
+            f.write(get_text + ',' + '\n')
         f.write(next_url)
