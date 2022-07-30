@@ -53,6 +53,12 @@ with open(path, 'w') as f:
                 print('ログインが必要なページです')
                 continue
 
+            error_page = soup.find(class_='error')
+
+            if error_page:
+                print('ページが見つかりません')
+                continue
+
             link = data
 
             title = soup.select_one(
