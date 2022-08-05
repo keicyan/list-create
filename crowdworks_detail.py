@@ -85,9 +85,14 @@ with open(path, 'w') as f:
                 print('データがありません')
                 continue
 
+            # 応募人数
             apply = tb[0]
 
-            contract = tb[2]
+            # 契約した人
+            contract = tb[1]
+
+            # 募集人数
+            # contract = tb[2]
 
             # 案件名の取得
             title_text = title.text
