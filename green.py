@@ -35,7 +35,8 @@ try:
     while True:
         soup = BeautifulSoup(response.text, 'html.parser')
         time.sleep(random.randint(1, 5))
-        new_company = soup.find_all('h3', class_='card-info__detail-area__box__title')
+        new_company = soup.find_all(
+            'h3', class_='card-info__detail-area__box__title')
 
         company += new_company
         company = list(set(company))
