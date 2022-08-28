@@ -1,3 +1,4 @@
 data/*
 staging/
 input_data/*
+__pycache__
