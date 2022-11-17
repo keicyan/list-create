@@ -26,7 +26,7 @@ response = requests.get(target)
 dt_now = datetime.datetime.now()
 datetime = dt_now.strftime('%y%m%d%H%M%S')
 dir = './data/'
-file_name = "wontedly-"
+file_name = "wantedly-"
 path = dir + file_name + datetime + '.csv'
 # path = './data/sample.csv'
 
@@ -52,7 +52,7 @@ try:
 
         print(count)
 
-        next = soup.find('a', attrs={'rel':'next'})
+        next = soup.find('a', attrs={'rel': 'next'})
         print(next.get("href"))
 
         if count == base_count:

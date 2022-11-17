@@ -42,7 +42,8 @@ try:
 
         print(count)
 
-        next = soup.select('#app > div.l-contents > div.l-contents-l.l-job-flex > article > div.l-common-pagerArea.l-common-pagerArea_pc > ul > li:last-child > a')
+        next = soup.select(
+            '#app > div.l-contents > div.l-contents-l.l-job-flex > article > div.l-common-pagerArea.l-common-pagerArea_pc > ul > li:last-child > a')
         next_url = next[0].attrs['href']
         print(next_url)
 
