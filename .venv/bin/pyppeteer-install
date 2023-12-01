@@ -1,4 +1,4 @@
-#!/Users/keishini_wasaki/workspace/myproduct/scrayping/.venv/bin/python3.9
+#!/Users/keishini_wasaki/workspace/myproduct/scrayping/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
