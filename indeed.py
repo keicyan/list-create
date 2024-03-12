@@ -1,78 +1,87 @@
 # coding: UTF-8
-import requests
-from bs4 import BeautifulSoup
+from optparse import TitledHelpFormatter
 from urllib.parse import urljoin
-import time
-import datetime
-import csv
+from datetime import datetime
 import random
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
-# 取得URLの設定
-print("indeedのurlを入力してください")
 
-target = input(">")
+def main():
+    # 取得URLの設定
+    print("indeedのurlを入力してください")
 
-# 取得件数の設定
-print('')
-print("取得数の入力（数字）")
+    target = input(">")
 
-num = int(input(">"))
+    # 保存先の設定
+    dt = datetime.now()
+    dt_str = dt.strftime('%y%m%d%H%M%S')
+    dir = './data/'
+    file_name = "indeed-"
+    path = dir + file_name + dt_str + '.csv'
 
-# 保存先の設定
-dt_now = datetime.datetime.now()
-datetime = dt_now.strftime('%y%m%d%H%M%S')
-dir = './data/'
-file_name = "indeed-"
-path = dir + file_name + datetime + '.csv'
+    # テストモードの設定
+    if target == "test":
+        target = "https://jp.indeed.com/jobs?q=%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%80%80%E5%8F%97%E8%A8%97&l=&vjk=55d699e40649d5c3&advn=1440220986574916"
+        path = dir + file_name + 'test.csv'
 
-# テストモードの設定
-if target == "test":
-    target = "https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2+Laravel&start=40"
-    path = dir + file_name + 'test.csv'
+    # Web Driver起動
+    driver = webdriver.Chrome('./static/chromedriver')
+    driver.implicitly_wait(60)
 
-# Responseオブジェクトの生成
-response = requests.get(target)
+    # ページの表示
+    driver.get(target)
 
-# baseURLの設定
-base_url = "https://jp.indeed.com/"
+    company_list = []
 
-company = []
+    try:
+        while True:
+            driver.implicitly_wait(random.randint(5, 30))
 
-try:
-    while True:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        time.sleep(random.randint(1, 5))
-        new_company = soup.find_all('span', class_='companyName')
+            company_elements = driver.find_elements_by_css_selector(
+                '#mosaic-provider-jobcards > ul > li > div > div.slider_container.css-12igfu2.eu4oa1w0 > div > div > div > table.css-1v79ar.eu4oa1w0 > tbody > tr > td > div.company_location.css-104iw4m.e37uo190 > div > span')
 
-        company += new_company
-        company = list(set(company))
-        count = len(company)
+            for item in company_elements:
+                company_name = item.text
+                company_list.append(company_name)
 
-        print(count)
+            # 取得数の表示
+            company_list = list(set(company_list))
+            count = len(company_list)
 
-        next = soup.find('a', attrs={'aria-label':'次へ'})
-        print(next.get("href"))
+            # 次のページのURLを取得
+            next = driver.find_element_by_css_selector('[data-testid="pagination-page-next"]')
+            next_url = next.get_attribute('href')
+            driver.get(next_url)
 
-        if count >= num:
-            break
+            # ログの表示
+            print(count)
+            print(next_url)
 
-        # 次のページのurlの取得
-        dynamic_url = urljoin(base_url, next.get("href"))
-        response = requests.get(dynamic_url)
+            if not next:
+                break
 
-    # CSVファイルの出力
+        # CSVファイルの出力
+        write_csv(path, company_list, next_url)
+
+        # Web Driverを停止
+        driver.close()
+
+    except:
+        print('AccessError')
+        print('次のurl:' + next_url)
+        # CSVファイルの出力
+        write_csv(path, company_list, next_url)
+
+        # Web Driverを停止
+        driver.close()
+
+def write_csv(path, list, url):
     with open(path, 'w') as f:
         f.write('name' + ',' + '\n')
-        for item in company:
-            f.write(item.get_text() + ',' + '\n')
-        f.write(dynamic_url)
+        for item in list:
+            f.write(item + ',' + '\n')
+        f.write(url)
 
-except:
-    print('AccessError')
-    print('次のurl:' + dynamic_url)
-    # CSVファイルの出力
-    with open(path, 'w') as f:
-        f.write('name' + ',' + '\n')
-        for item in company:
-            f.write(item.get_text() + ',' + '\n')
-        f.write(dynamic_url)
+if __name__ == "__main__":
+    main()
